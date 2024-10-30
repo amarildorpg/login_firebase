@@ -2,7 +2,7 @@ function onChangeEmail() {
     const email = form.email().value;
     form.emailRequiredError().style.display = email ? "none" : "block";
 
-    form.emailInvalidError().style.display = validaEmail(email) ? "none" : "block";
+    form.emailInvalidError().style.display = validEmail(email) ? "none" : "block";
 }
 
 function onChangePassword() {
@@ -34,7 +34,7 @@ function toggleRegisterButtonDisable() {
 
 function isFormValid() {
     const email = form.email().value;
-    if (!email || !validaEmail(email)) {
+    if (!email || !validEmail(email)) {
         return false
     }
     const password = form.password().value;

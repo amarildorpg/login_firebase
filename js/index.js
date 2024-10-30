@@ -25,8 +25,8 @@ function getErroMessage(error) {
     }
     return error.message;
 }
-function registrar() {
-    window.location.href = "pages/registrar/registrar.html";
+function register() {
+    window.location.href = "pages/registrar/register.html";
 }
 
 function recoverPassword() {
@@ -51,7 +51,7 @@ function toogleButtonDisable() {
 function toogleEmailErrors() {
     const email = form.email().value;
     form.emailRequiredError().style.display = email ? "none" : "block"
-    form.emailInvalidError().style.display = validaEmail(email) ? "none" : "block"
+    form.emailInvalidError().style.display = validEmail(email) ? "none" : "block"
 }
 function tooglePasswordError() {
     const password = form.password().value;
@@ -62,7 +62,7 @@ function isMailValid() {
     if (!email) {
         return false;
     }
-    return validaEmail(email);
+    return validEmail(email);
 }
 function isPasswordValid() {
     const password = form.password().value;

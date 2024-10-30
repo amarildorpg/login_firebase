@@ -1,3 +1,3 @@
-function validaEmail(email) {
+function validEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
 }

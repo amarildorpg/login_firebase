@@ -14,7 +14,7 @@
     font-size: 28px;
 }
 
-.centralizar {
+.centralize {
     display: flex;
     justify-content: center;
     align-items: center;

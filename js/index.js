@@ -1,10 +1,16 @@
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        window.location.href = "pages/home/home.html";
+    }
+})
+
 function onChangeEmail() {
     toogleButtonDisable();
     toogleEmailErrors();
 }
 function onChangePassword() {
     toogleButtonDisable();
-    tooglePasswordError()
+    tooglePasswordError();
 }
 function login() {
     showLoading();
@@ -26,7 +32,7 @@ function getErroMessage(error) {
     return error.message;
 }
 function register() {
-    window.location.href = "pages/registrar/register.html";
+    window.location.href = "pages/register/register.html";
 }
 
 function recoverPassword() {
@@ -59,6 +65,7 @@ function tooglePasswordError() {
 }
 function isMailValid() {
     const email = form.email().value;
+    console.log(email);
     if (!email) {
         return false;
     }

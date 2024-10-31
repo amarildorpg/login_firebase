@@ -20,6 +20,28 @@ function onChangeConfirmPassword() {
     toggleRegisterButtonDisable();
 }
 
+function register() {
+    showLoading();
+    const email = form.email().value;
+    const password = form.password().value;
+    firebase.auth().createUserWithEmailAndPassword(
+        email,password
+    ).then( () => {
+        hideLoading();
+        //criar nova validação validação se autorizado ou não
+        Window.location.href = "../../pages/home/home.html"
+    }).catch ( error => {
+        hideLoading();
+        alert(getErroMessage(error));
+    })
+}
+
+function getErroMessage(error) {
+    if (Error.code =="auth/email-already-in-use")
+        return "Email já esta em uso";
+    return error.message;
+}
+
 function validPasswordMatch() {
     const password = form.password().value;
     const confirmPassword = form.confirmarPassword().value;
@@ -30,6 +52,9 @@ function validPasswordMatch() {
 }
 function toggleRegisterButtonDisable() {
     form.registerButton().disabled = !isFormValid();
+
+  //  console.log(!isFormValid());
+    
 }
 
 function isFormValid() {
@@ -38,7 +63,8 @@ function isFormValid() {
         return false
     }
     const password = form.password().value;
-    if (!password || password.length >= 6) {
+    if (!password || password.length < 6) {
+        console.log(password.length < 6 );
         return false
     }
     const confirmPassword = form.confirmarPassword().value;
@@ -46,7 +72,6 @@ function isFormValid() {
         return false
     }
     return true;
-
 }
 
 const form = {

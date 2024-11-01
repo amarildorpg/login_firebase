@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Cadastro de gastos</title>
+    <link rel="stylesheet" href="../../css/global.css">
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
-    HOME
+    <header>
+        <button type="button" class="clear" onclick="logout()">Sair</button>
+    </header>
 </body>
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth-compat.js"></script>
+<script src="../../js/firebase.js"></script>
+<script src="home.js"></script>
+<script src="../../js/auth-guard.js"></script>
 </html>

@@ -14,14 +14,21 @@ function onChangePassword() {
 }
 function login() {
     showLoading();
-    firebase.auth().signInWithEmailAndPassword(form.email().value, form.password().value).then(response => {
-        hideLoading();
-        window.location.href = "pages/home/home.html";
-    }).catch(error => {
-        hideLoading();
-        alert(getErroMessage(error));
-    });
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+        .then(() => {
+            // Realize o login após configurar a persistência
+            return firebase.auth().signInWithEmailAndPassword(form.email().value, form.password().value);
+        })
+        .then(response => {
+            hideLoading();
+            window.location.href = "pages/home/home.html";
+        })
+        .catch(error => {
+            hideLoading();
+            alert(getErroMessage(error));
+        });
 }
+
 function getErroMessage(error) {
     if (error.code == "auth/invalid-credential") {
         return "Usuário não encontrado"

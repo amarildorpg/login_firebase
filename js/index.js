@@ -1,5 +1,5 @@
 firebase.auth().onAuthStateChanged(user => {
-    if (user) {
+    if (user && localStorage.getItem("liberadoGlobal") == true) {
         window.location.href = "pages/home/home.html";
     }
 })
@@ -12,6 +12,18 @@ function onChangePassword() {
     toogleButtonDisable();
     tooglePasswordError();
 }
+
+function logout() {
+    firebase.auth().signOut().then(() => {
+        window.location.href = "./index.html";
+        localStorage.setItem("liberadoGlobal", '');
+        localStorage.setItem("nomeGlobal", '');
+        localStorage.setItem("emailGlobal", '');
+    }).catch(() => {
+        alert('Erro ao fazer logout.');
+    })
+}
+
 function login() {
     showLoading();
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
@@ -21,7 +33,29 @@ function login() {
         })
         .then(response => {
             hideLoading();
-            window.location.href = "pages/home/home.html";
+            firebase.firestore()
+                .collection('login')
+                .get()
+                .then(snapshot => {
+                    localStorage.setItem("emailGlobal",snapshot.docs.map(doc => doc.data().email));
+                    localStorage.setItem("nomeGlobal",snapshot.docs.map(doc => doc.data().nome));
+                    localStorage.setItem("liberadoGlobal",snapshot.docs.map(doc => doc.data().liberado));
+                    const emailExists = localStorage.getItem("emailGlobal").includes(form.email().value); // Verifica se o email existe na lista
+                    if (emailExists) {
+                        if (localStorage.getItem("liberadoGlobal") == "true") {
+                            window.location.href = "pages/home/home.html";
+                        } else {
+                            alert("Email não liberado!");
+                            logout();
+                        }
+                    } else {
+                        alert("Email não encontrado.");
+                        logout();
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao acessar o Firestore:", error);
+                })
         })
         .catch(error => {
             hideLoading();
@@ -45,9 +79,9 @@ function register() {
 function recoverPassword() {
     showLoading();
     firebase.auth().sendPasswordResetEmail(form.email().value).then(() => {
-            hideLoading();
-            alert('Email de recuperação senha enviado com sucesso, verifique sua caixa de entrada do email '+form.email().value); 
-        })
+        hideLoading();
+        alert('Email de recuperação senha enviado com sucesso, verifique sua caixa de entrada do email ' + form.email().value);
+    })
         .catch(error => {
             hideLoading();
             alert(getErroMessage(error));

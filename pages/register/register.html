@@ -12,6 +12,11 @@
 <body class="centralize">
     <form>
         <div class="form-field">
+            <div><label>Nome Completo</label></div>
+            <input type="nome" id="nome" oninput="onChangeNome()" id="nome" placeholder="digite seu nome">
+            <div class="error" id="nome-required-error">Nome é obrigatório</div>
+        </div>
+        <div class="form-field">
             <div><label>Email</label></div>
             <input type="email" oninput="onChangeEmail()" id="email" placeholder="seu@email.com">
             <div class="error" id="email-required-error">Email é obrigatório</div>

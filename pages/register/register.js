@@ -5,6 +5,14 @@ function onChangeEmail() {
     form.emailInvalidError().style.display = validEmail(email) ? "none" : "block";
 }
 
+function onChangeNome() {
+    const nomeInput = form.nome();
+    nomeInput.value = nomeInput.value.toUpperCase();
+    const nome = nomeInput.value;
+    form.nomeRequiredError().style.display = nome ? "none" : "block";
+    toggleRegisterButtonDisable();
+}
+
 function onChangePassword() {
     const password = form.password().value;
     form.passwordRequiredError().style.display = password ? "none" : "block";
@@ -24,20 +32,21 @@ function register() {
     showLoading();
     const email = form.email().value;
     const password = form.password().value;
-    firebase.auth().createUserWithEmailAndPassword(
-        email,password
-    ).then( () => {
-        hideLoading();
-        //criar nova validação validação se autorizado ou não
-        Window.location.href = "../../pages/home/home.html"
-    }).catch ( error => {
-        hideLoading();
-        alert(getErroMessage(error));
-    })
+    const nome = form.nome().value;
+    if (nome != '')
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(() => {
+            hideLoading();
+            //criar nova validação validação se autorizado ou não
+            Window.location.href = "../../pages/home/home.html"
+        }).catch(error => {
+            hideLoading();
+            alert(getErroMessage(error));
+        })
 }
 
 function getErroMessage(error) {
-    if (Error.code =="auth/email-already-in-use")
+    if (Error.code == "auth/email-already-in-use")
         return "Email já esta em uso";
     return error.message;
 }
@@ -53,18 +62,21 @@ function validPasswordMatch() {
 function toggleRegisterButtonDisable() {
     form.registerButton().disabled = !isFormValid();
 
-  //  console.log(!isFormValid());
-    
+    //  console.log(!isFormValid());
+
 }
 
 function isFormValid() {
+    const nome = form.nome().value;
+    if (!nome) {
+        return false
+    }
     const email = form.email().value;
     if (!email || !validEmail(email)) {
         return false
     }
     const password = form.password().value;
     if (!password || password.length < 6) {
-        console.log(password.length < 6 );
         return false
     }
     const confirmPassword = form.confirmarPassword().value;
@@ -83,5 +95,7 @@ const form = {
     passwordDoesntMatchError: () => document.getElementById("password-doesnt-match-error"),
     passwordRequiredError: () => document.getElementById("password-required-error"),
     passwordMinLengthError: () => document.getElementById("password-min-length-error"),
+    nome: () => document.getElementById("nome"),
+    nomeRequiredError: () => document.getElementById("nome-required-error"),
     registerButton: () => document.getElementById("register-button")
 }
